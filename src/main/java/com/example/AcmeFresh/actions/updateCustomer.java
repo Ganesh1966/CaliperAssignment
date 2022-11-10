@@ -1,0 +1,28 @@
+package com.example.AcmeFresh.actions;
+
+import com.example.AcmeFresh.actions.builder.Action;
+import com.example.AcmeFresh.actions.builder.ActionHandler;
+import com.example.AcmeFresh.exceptions.DataValidationException;
+import com.example.AcmeFresh.models.Customer;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+@Component
+public class updateCustomer extends ActionHandler<String> {
+    @Override
+    public Action handlingFor(){
+        return Action.UPDATE_CUSTOMER;
+    }
+
+    @Override
+    public String executeAction(Map operateOn){
+        if(operateOn.isEmpty())
+            throw new DataValidationException("customer cannot be empty");
+
+        Customer customer=mapper.convertValue(operateOn.get("customer"), Customer.class);
+
+        return persistenceStore.updateCustomer(customer);
+
+    }
+}
